@@ -15,36 +15,39 @@ const createEmployeeRecords = (arr) => {
     return arr.map(x => createEmployeeRecord(x))
 }
 
-const createTimeInEvent = (employee, timestamp) => {
-    let new_obj = {type: "TimeIn", 
-                   date: timestamp.slice(0,10), 
-                   hour: parseInt(timestamp.slice(-4))}
-    employee.timeInEvents.push(new_obj)
-    return employee
+function createTimeInEvent(timestamp){
+    const arrayDate = timestamp.split(' ')
+    const new_obj = {type: "TimeIn", 
+                    date: arrayDate[0], 
+                    hour: parseInt(arrayDate[1])
+                    }
+     this.timeInEvents.push(new_obj)
+     return this
+ }
+ function createTimeOutEvent(timestamp){
+    const arrayDate = timestamp.split(' ')
+    const new_obj = {type: "TimeOut", 
+                   date: arrayDate[0], 
+                   hour: parseInt(arrayDate[1])}
+    this.timeOutEvents.push(new_obj)
+    return this
 }
-const createTimeOutEvent = (employee, timestamp) => {
-    let new_obj = {type: "TimeOut", 
-                   date: timestamp.slice(0,10), 
-                   hour: parseInt(timestamp.slice(-4))}
-    employee.timeOutEvents.push(new_obj)
-    return employee
-}
-
-const hoursWorkedOnDate = (employee, dateOfEvent) => {
-    let startTime = employee.timeInEvents.find(element => element.date === dateOfEvent)
-    let endTime = employee.timeOutEvents.find(element => element.date === dateOfEvent )
+function hoursWorkedOnDate(dateOfEvent){
+    let startTime = this.timeInEvents.find(element => element.date === dateOfEvent)
+    let endTime = this.timeOutEvents.find(element => element.date === dateOfEvent )
+    console.log(endTime) 
     let hoursWorked = endTime.hour - startTime.hour
     return hoursWorked/100
 }
 
-const wagesEarnedOnDate = (employee, dateOfEvent) => {
-    let wages = hoursWorkedOnDate(employee, dateOfEvent) * employee.payPerHour
+function wagesEarnedOnDate(dateOfEvent) {
+    let wages = hoursWorkedOnDate.call(this, dateOfEvent) * this.payPerHour
     return wages
 }
 
-const calculatePayroll = (employees) => {
+function calculatePayroll(employees) {
     let allEmployeesPay = employees.map((employee) => {
-        return allWagesFor(employee)
+        return allWagesFor.call(employee)
     })
     return allEmployeesPay.reduce((x,y)=> x+y)
 }
